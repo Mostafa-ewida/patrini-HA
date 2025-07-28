@@ -64,7 +64,7 @@ PATRONI_REPL_USER_PASS="W7zKgLKd210SKW8Y"
 ```
 ## Usage
 ```
-git clone https://github.com/Mostafa-ewida/patroni-ha.git
+wget https://raw.githubusercontent.com/Mostafa-ewida/patroni-ha/refs/heads/main/postgres_cluster_setup.sh
 ```
 ```
 chmod +x postgres_cluster_setup.sh
@@ -106,9 +106,8 @@ sudo ./postgres_cluster_setup.sh
 # View cluster status
 patronictl -c /etc/patroni.yml list
 
-
-# Follow Patroni logs in real-time
-journalctl -u patroni -f
+# more commands to help you navigate
+patronictl -c /etc/patroni.yml --help
 ```
 
 
@@ -116,5 +115,5 @@ journalctl -u patroni -f
 
 - **Patroni**: 
   ```bash
-  /var/log/patroni.log  # or
   journalctl -u patroni
+  ```
