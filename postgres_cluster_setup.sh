@@ -5,20 +5,18 @@
 #CHANGEME
 # Hostname configuration (for /etc/hosts)
 declare -A HOSTNAMES=(
-    ["10.128.0.6"]="etcd01"
-    ["10.128.0.12"]="etcd02"
-    ["10.128.0.8"]="psql01"
-    ["10.128.0.9"]="psql02"
+    ["10.128.0.15"]="etcd"
+    ["10.128.0.13"]="psgr01"
+    ["10.128.0.14"]="psgr02"
 )
 
 #CHANGEME
 # Node configuration with IP-based roles
 declare -A NODE_ROLES=(
     # Format: ["ip"]="role1,role2"
-    ["10.128.0.6"]="etcd,haproxy"          # Combined etcd and haproxy on same IP
-    ["10.128.0.12"]="etcd,haproxy"         # Additional etcd node
-    ["10.128.0.8"]="postgres"
-    ["10.128.0.9"]="postgres"
+    ["10.128.0.15"]="etcd,haproxy"          # Combined etcd and haproxy on same IP
+    ["10.128.0.13"]="postgres"
+    ["10.128.0.14"]="postgres"
 )
 
 
@@ -26,9 +24,9 @@ declare -A NODE_ROLES=(
 #CHANGEME
 # Common variables
 PG_VERSION="14"
-VIRTUAL_IP="10.128.0.9"
+VIRTUAL_IP="10.128.0.100"
 VIP_INTERFACE="ens4"
-MAIN_HAPROXY_IP="10.128.0.6"
+MAIN_HAPROXY_IP="10.128.0.15"
 HAPROXY_POSTGRES_PORT="5000"
 HAPROXY_STAT_PORT="7000"
 CLUSTER_SCOPE="postgres"
@@ -127,12 +125,6 @@ setup_postgres_node() {
     sudo chown postgres:postgres $PATRONI_DATA_DIR
     sudo chmod 700 $PATRONI_DATA_DIR
 
-    # Generate etcd endpoints
-    ETCD_ENDPOINTS=""
-    for ip in "${ETCD_IPS[@]}"; do
-        ETCD_ENDPOINTS+="${ip}:2379,"
-    done
-    ETCD_ENDPOINTS=${ETCD_ENDPOINTS%,}
 
     # Generate pg_hba entries
     # PG_HBA_ENTRIES=""
@@ -153,7 +145,9 @@ restapi:
   listen: $CURRENT_IP:8008
   connect_address: $CURRENT_IP:8008
 etcd:
-  hosts: $ETCD_ENDPOINTS
+  hosts: 
+$(printf "    - %s:2379\n" "${ETCD_IPS[@]}")
+
 bootstrap:
   dcs:
     ttl: 30
