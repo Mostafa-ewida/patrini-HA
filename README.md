@@ -36,14 +36,21 @@ declare -A HOSTNAMES=(
     ["10.128.0.12"]="etcd02"
     ["10.128.0.8"]="psql01"
     ["10.128.0.9"]="psql02"
+  # ["10.128.0.xx"]="harpoxy01"
+  # ["10.128.0.xx"]="etcd03"
+  # ...
 )
 
 # Node roles configuration
+# you can use mulitple roles for one node if you're tight on resources as I have done here ["10.128.0.6"]="etcd,haproxy"
 declare -A NODE_ROLES=(
     ["10.128.0.6"]="etcd,haproxy"
     ["10.128.0.12"]="etcd,haproxy"
     ["10.128.0.8"]="postgres"
     ["10.128.0.9"]="postgres"
+  # ["10.128.0.xx"]="harpoxy"
+  # ["10.128.0.xx"]="etcd"
+  # ...
 )
 
 # Common variables
