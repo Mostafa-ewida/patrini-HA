@@ -23,7 +23,6 @@ This script automates the setup of a highly available PostgreSQL cluster using:
 - Ubuntu servers  
 - All nodes must have passwordless sudo access  
 - Network connectivity between all nodes  
-- Identical PostgreSQL version installed on all database nodes  
 
 ## Configuration
 
