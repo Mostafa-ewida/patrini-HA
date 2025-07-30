@@ -309,6 +309,7 @@ vrrp_script chk_haproxy {
 vrrp_instance VI_1 {
     interface $VIP_INTERFACE
     state $([[ "$priority" == 101 ]] && echo "MASTER" || echo "BACKUP")
+    
     virtual_router_id 51
     priority $priority
     virtual_ipaddress {
@@ -359,7 +360,7 @@ if [[ " ${CURRENT_ROLES[*]} " =~ " haproxy " ]]; then
     echo "HAProxy Status:"
     curl -sI http://localhost:7000 | head -1
     echo "Keepalived Status:"
-    ip a show eth0 | grep $VIRTUAL_IP || echo "VIP not assigned (may be normal for backup node)"
+    ip a show $VIP_INTERFACE | grep $VIRTUAL_IP || echo "VIP not assigned (may be normal for backup node)"
 fi
 
 if [[ " ${CURRENT_ROLES[*]} " =~ " postgres " ]]; then
